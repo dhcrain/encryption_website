@@ -3,13 +3,6 @@
 {% block title %}Encrypt{% endblock %}
 
 {% block body %}
-    <form class="" action="" method="post">
-        <div class="row">
-            <div class="twelve columns">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <input class="button" type="submit" name="submit" value="Submit">
-            </div>
-        </div>
-    </form>
+    <h1>Encrypt Your Message</h1>
+    {% include "includes/form.html" %}
 {% endblock %}

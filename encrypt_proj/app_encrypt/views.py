@@ -14,7 +14,7 @@ class IndexView(TemplateView):
 
 class EncryptView(FormView):
     form_class = EncryptForm
-    success_url = reverse_lazy('index_view')
+    success_url = reverse_lazy('encrypt_view')
     template_name = 'encrypt.html'
 
     def form_valid(self, form):
@@ -42,33 +42,26 @@ class EncryptView(FormView):
         twilio_number = os.environ.get('TWILIO_NUMBER')
 
         client = TwilioRestClient(twilio_account_sid, twilio_auth_token)
-        to_phone = form.cleaned_data.get('email')
+        to_phone = form.cleaned_data.get('phone')
         message = client.messages.create(body=key_str,
-            to="+1{}".format(to_phone),    # Replace with your phone number
+            to="+1{}".format(to_phone),
             from_=twilio_number)
-        # print(message.sid)
-
         return super().form_valid(form)
 
 
 class DecryptView(FormView):
     form_class = DecryptForm
     success_url = reverse_lazy('decoded_view')
-    template_name = 'encrypt.html'
+    template_name = 'decrypt.html'
 
     def form_valid(self, form):
         key = form.cleaned_data.get('key')
         key = str.encode(key)
         f = Fernet(key)
-
         encrypted_msg = form.cleaned_data.get('encrypted_message')
-
         msg_b = str.encode(encrypted_msg)
-
         msg = f.decrypt(msg_b)
-        # decoded_msg = msg.decode()
         self.request.session['decoded_msg'] = msg.decode()
-        print("Dectrypted Message : \n", msg.decode())
         return super().form_valid(form)
 
 

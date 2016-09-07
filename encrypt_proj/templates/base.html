@@ -10,6 +10,16 @@
     </head>
     <body>
         <br>
+        <nav>
+            <div class="row text-center">
+                <div class="six columns">
+                    <a class="button" href="{% url 'encrypt_view' %}">ENCRYPT</a>
+                </div>
+                <div class="six columns">
+                    <a class="button" href="{% url 'decrypt_view' %}">DECRYPT</a>
+                </div>
+            </div>
+        </nav>
         <hr>
         <div class="container main-content">
             {% block body %}
@@ -19,8 +29,12 @@
         <footer>
             <hr>
             {% block footer %}
-            <p class="text-center">
-                This is not super secure!
+            <p>
+                <h3 class="text-center">This is not super secure!</h3>
+                <p class="text-center">This is an experiemnt in encrypting and sending messages
+                <br>
+                No information is stored on this website in a database or otherwise.
+                </p>
             </p>
             {% endblock %}
         </footer>
