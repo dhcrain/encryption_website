@@ -15,11 +15,12 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
-from app_encrypt.views import IndexView, EncryptView, DecryptView
+from app_encrypt.views import IndexView, EncryptView, DecryptView, DecodedView
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', IndexView.as_view(), name='index_view'),
     url(r'^encrypt$', EncryptView.as_view(), name='encrypt_view'),
     url(r'^decrypt$', DecryptView.as_view(), name='decrypt_view'),
+    url(r'^decoded$', DecodedView.as_view(), name='decoded_view'),
 ]

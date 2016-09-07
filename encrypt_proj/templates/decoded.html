@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block title %}Somthing Decoded{% endblock %}
+
+{% block body %}
+    <div class="row text-center">
+        <h1>Decoded Message</h1>
+        <p>{{ request.session.decoded_msg }}</p>
+    </div>
+{% endblock %}

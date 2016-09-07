@@ -27,9 +27,6 @@ class EncryptView(FormView):
         encrypted_msg = f.encrypt(msg).decode()
         # Convert to b
         key_str = key.decode()
-        # print(key_str)
-        # print("Encrypted Messge: ", encrypted_msg)
-
         # send email with encrypted text
         message = "You have recived an encrypted message, go to XXXXXXXXX to decrypt, \nyou should also get the secret key by another method."
         message += "\n\n{}".format(encrypted_msg)
@@ -56,7 +53,7 @@ class EncryptView(FormView):
 
 class DecryptView(FormView):
     form_class = DecryptForm
-    success_url = reverse_lazy('index_view')
+    success_url = reverse_lazy('decoded_view')
     template_name = 'encrypt.html'
 
     def form_valid(self, form):
@@ -69,5 +66,11 @@ class DecryptView(FormView):
         msg_b = str.encode(encrypted_msg)
 
         msg = f.decrypt(msg_b)
+        # decoded_msg = msg.decode()
+        self.request.session['decoded_msg'] = msg.decode()
         print("Dectrypted Message : \n", msg.decode())
         return super().form_valid(form)
+
+
+class DecodedView(TemplateView):
+    template_name = "decoded.html"
