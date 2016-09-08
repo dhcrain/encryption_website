@@ -1,23 +1,20 @@
 # from django.shortcuts import render
 from django.views.generic import TemplateView, FormView
 from app_encrypt.forms import EncryptForm, DecryptForm
-from django.core.urlresolvers import reverse_lazy, resolve
+from django.core.urlresolvers import reverse_lazy
 from django.core.mail import send_mail
 from cryptography.fernet import Fernet
 from twilio.rest import TwilioRestClient
 import os
 
 
-class IndexView(TemplateView):
-    template_name = 'index.html'
-
-
 class EncryptView(FormView):
     form_class = EncryptForm
-    success_url = reverse_lazy('encrypt_view')
+    success_url = reverse_lazy('encrypt_template_view')
     template_name = 'encrypt.html'
 
     def form_valid(self, form):
+        to_email = form.cleaned_data.get('email')
         # Convert to b
         msg = str.encode(form.cleaned_data.get('message'))
         # Genereate key
@@ -25,7 +22,7 @@ class EncryptView(FormView):
         f = Fernet(key)
         # Encrypt text
         encrypted_msg = f.encrypt(msg).decode()
-        # Convert to b
+        # Convert from b
         key_str = key.decode()
         # send email with encrypted text
         message = """
@@ -36,14 +33,14 @@ you should also get the secret key by another method.
 {}
 <------- Stop copying above this line ------->
 
-        """.format(resolve('decrypt_view').url_path, encrypted_msg)
-        # message = "You have recived an encrypted message, go to XXXXXXXXX to decrypt, \nyou should also get the secret key by another method."
-        # message += "\n\n{}".format(encrypted_msg)
+This is a side project of dhcrain.com
+No guarantee of security
+        """.format(self.request.build_absolute_uri('decrypt'), encrypted_msg)
         send_mail(
             subject="You have an ecrypted message",
             message=message,
             from_email='fathen.co@gmail.com',
-            recipient_list=[form.cleaned_data.get('email')],
+            recipient_list=[to_email],
         )
         # send text with secret key
         twilio_account_sid = os.environ.get('TWILIO_ACCOUNT_SID')
@@ -55,7 +52,13 @@ you should also get the secret key by another method.
         message = client.messages.create(body=key_str,
                                          to="+1{}".format(to_phone),
                                          from_=twilio_number)
+        self.request.session['encoded_email'] = to_email
+        self.request.session['encoded_phone'] = to_phone
         return super().form_valid(form)
+
+
+class EncryptTemplateView(TemplateView):
+    template_name = 'encoded.html'
 
 
 class DecryptView(FormView):
