@@ -54,11 +54,12 @@ No guarantee of security
                                          from_=twilio_number)
         self.request.session['encoded_email'] = to_email
         self.request.session['encoded_phone'] = to_phone
+        self.request.session.set_expiry(0)
         return super().form_valid(form)
 
 
 class EncryptTemplateView(TemplateView):
-    template_name = 'encoded.html'
+    template_name = 'encrypt_success.html'
 
 
 class DecryptView(FormView):
@@ -74,8 +75,9 @@ class DecryptView(FormView):
         msg_b = str.encode(encrypted_msg)
         msg = f.decrypt(msg_b)
         self.request.session['decoded_msg'] = msg.decode()
+        self.request.session.set_expiry(0)
         return super().form_valid(form)
 
 
 class DecodedView(TemplateView):
-    template_name = "decoded.html"
+    template_name = "decrypt_success.html"

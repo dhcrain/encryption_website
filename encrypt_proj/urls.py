@@ -20,7 +20,7 @@ from app_encrypt.views import EncryptView, EncryptTemplateView, DecryptView, Dec
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', EncryptView.as_view(), name='encrypt_view'),
-    url(r'^decrypt$', EncryptTemplateView.as_view(), name='encrypt_template_view'),
+    url(r'^encrypt_success$', EncryptTemplateView.as_view(), name='encrypt_template_view'),
     url(r'^decrypt$', DecryptView.as_view(), name='decrypt_view'),
-    url(r'^decoded$', DecodedView.as_view(), name='decoded_view'),
+    url(r'^decrypt_success$', DecodedView.as_view(), name='decoded_view'),
 ]

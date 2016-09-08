@@ -125,3 +125,5 @@ EMAIL_HOST_PASSWORD = os.environ['email_password']
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
+
+# SESSION_COOKIE_AGE = 0
