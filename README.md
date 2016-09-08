@@ -9,7 +9,7 @@ This is a pet project of dhcrain.com, please do not think that this an absolutel
 ## To use:
 Set up Python 3 virtual environment.  
 `git clone https://github.com/dhcrain/encryption_website.git`  
-`pip install -r requirements.txt`  
 `cd encryption_website`  
+`pip install -r requirements.txt`  
 `python manage.py runserver`  
 Go to http://127.0.0.1:8000/ in your web browser
