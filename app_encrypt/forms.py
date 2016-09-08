@@ -7,15 +7,17 @@ class EncryptForm(forms.Form):
     email = forms.EmailField(required=True,
                              help_text=_("Email Address to send encrypted message")
                              )
-    message = forms.CharField(widget=forms.Textarea)
     phone = forms.CharField(required=True,
                             help_text=_("Phone number to text secret key")
                             )
+    message = forms.CharField(widget=forms.Textarea)
 
 
 class DecryptForm(forms.Form):
 
-    encrypted_message = forms.CharField(widget=forms.Textarea)
     key = forms.CharField(required=True,
-                            help_text=_("Exactally as it appears")
-                            )
+                          help_text=_("Exactally as it appears in your text")
+                          )
+    encrypted_message = forms.CharField(widget=forms.Textarea,
+                                        help_text=_("Copy and paste directly from your email.")
+                                        )

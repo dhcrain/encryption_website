@@ -1,7 +1,7 @@
 # from django.shortcuts import render
 from django.views.generic import TemplateView, FormView
 from app_encrypt.forms import EncryptForm, DecryptForm
-from django.core.urlresolvers import reverse_lazy
+from django.core.urlresolvers import reverse_lazy, resolve
 from django.core.mail import send_mail
 from cryptography.fernet import Fernet
 from twilio.rest import TwilioRestClient
@@ -28,8 +28,17 @@ class EncryptView(FormView):
         # Convert to b
         key_str = key.decode()
         # send email with encrypted text
-        message = "You have recived an encrypted message, go to XXXXXXXXX to decrypt, \nyou should also get the secret key by another method."
-        message += "\n\n{}".format(encrypted_msg)
+        message = """
+You have recived an encrypted message, go to {} to decrypt,
+you should also get the secret key by another method.
+
+<----------- Copy below this line ----------->
+{}
+<------- Stop copying above this line ------->
+
+        """.format(resolve('decrypt_view').url_path, encrypted_msg)
+        # message = "You have recived an encrypted message, go to XXXXXXXXX to decrypt, \nyou should also get the secret key by another method."
+        # message += "\n\n{}".format(encrypted_msg)
         send_mail(
             subject="You have an ecrypted message",
             message=message,
@@ -44,8 +53,8 @@ class EncryptView(FormView):
         client = TwilioRestClient(twilio_account_sid, twilio_auth_token)
         to_phone = form.cleaned_data.get('phone')
         message = client.messages.create(body=key_str,
-            to="+1{}".format(to_phone),
-            from_=twilio_number)
+                                         to="+1{}".format(to_phone),
+                                         from_=twilio_number)
         return super().form_valid(form)
 
 
