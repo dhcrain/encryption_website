@@ -120,7 +120,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-EMAIL_HOST_USER = 'fathen.co@gmail.com'
+EMAIL_HOST_USER = os.environ['email_username']
 EMAIL_HOST_PASSWORD = os.environ['email_password']
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
