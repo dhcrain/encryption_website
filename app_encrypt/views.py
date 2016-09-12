@@ -39,7 +39,7 @@ No guarantee of security
         send_mail(
             subject="You have an ecrypted message",
             message=message,
-            from_email='fathen.co@gmail.com',
+            from_email=os.environ['email_username'],
             recipient_list=[to_email],
         )
         # send text with secret key
@@ -52,9 +52,10 @@ No guarantee of security
         message = client.messages.create(body=key_str,
                                          to="+1{}".format(to_phone),
                                          from_=twilio_number)
+        # add info to session data to display confirmation on next page.
         self.request.session['encoded_email'] = to_email
         self.request.session['encoded_phone'] = to_phone
-        self.request.session.set_expiry(0)
+        self.request.session.set_expiry(10)  # Data removed from DB after 10 sec
         return super().form_valid(form)
 
 
@@ -74,8 +75,9 @@ class DecryptView(FormView):
         encrypted_msg = form.cleaned_data.get('encrypted_message')
         msg_b = str.encode(encrypted_msg)
         msg = f.decrypt(msg_b)
+        # add info to session data to display confirmation on next page.
         self.request.session['decoded_msg'] = msg.decode()
-        self.request.session.set_expiry(0)
+        self.request.session.set_expiry(10)  # Data removed from DB after 10 sec
         return super().form_valid(form)
 
 

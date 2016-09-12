@@ -4,7 +4,7 @@ This is a pet project of [dhcrain.com](https://dhcrain.com/), please do not thin
 
 This allows a user to encrypt a text message and email the encrypted message and then send an SMS text with the key to someone.
 
-In an effort to be secure, no messages are written to the database. Sessions are used to display confirmation of encryption and the decoded message. The data is deleted from the session when it ends (browser is closed).  
+In an effort to be secure, messages are only written to the database temporarily. Sessions are used to display confirmation of encryption and the decoded message. The data expires after 10 seconds.  
 
 However, sent emails are in the outbox of the email account you used and, in the Twilio logs.
 
